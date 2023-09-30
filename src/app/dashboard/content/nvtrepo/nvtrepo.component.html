@@ -1,0 +1,47 @@
+<!--[nzData]="dataSet"-->
+<div nz-row>
+  <div nz-col nzSpan="24">
+
+    <nz-table #nzTable [nzData]="listOfData" nzShowSizeChanger nzShowPagination nzTableLayout="auto" [nzPageSize]="10" [nzLoading]="loading" [nzTotal]="listOfData.length">
+
+      <thead>
+      <tr>
+        <th nzAlign="center" style="background-color: #00A79D">ID</th>
+        <th nzAlign="center" style="background-color: #00A79D">Description</th>
+        <th nzAlign="center" style="background-color: #00A79D">Created</th>
+        <th nzAlign="center" style="background-color: #00A79D">Modified</th>
+        <th nzAlign="center" style="background-color: #00A79D">Severity</th>
+        <!--        <th nzAlign="center" style="background-color: #00A79D">Severity</th>-->
+        <!--        <th nzAlign="center" style="background-color: #00A79D">QOD</th>-->
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let cve of nzTable.data">
+        <td nzAlign="center">{{ cve?.cve?.CVE_data_meta?.ID }}</td>
+        <td nzAlign="center">{{ cve?.cve?.description?.description_data[0]?.value }}</td>
+        <!--        <td nzAlign="center">{{ data.imported}}</td>-->
+        <td nzAlign="center">{{ cve?.publishedDate|date:'dd/MM/yy' }}</td>
+        <td nzAlign="center">{{ cve?.lastModifiedDate|date:'dd/MM/yy' }}</td>
+        <!--        <td nzAlign="center">{{ data.cve }}</td>-->
+        <td nzAlign="center">
+          <nz-progress nzPercent=" {{ cve?.impact?.baseMetricV3?.impactScore }}" nz-tooltip nzTooltipTitle="CVSS V3" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#FA1E4E' }"></nz-progress>
+          <nz-progress nzPercent=" {{ cve?.impact?.baseMetricV2?.impactScore }}" nz-tooltip nzTooltipTitle="CVSS V2" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#FA1E4E' }"></nz-progress>
+        </td>
+        <!--        <td nzAlign="center">{{ data.QOD }}</td>-->
+      </tr>
+      </tbody>
+
+    </nz-table>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <div class="ant-table-filter-dropdown">
+        <div class="search-box">
+          <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue"/>
+          <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+            Search
+          </button>
+          <button nz-button nzSize="small" (click)="reset()" class="reset-button">Reset</button>
+        </div>
+      </div>
+    </nz-dropdown-menu>
+  </div>
+</div>

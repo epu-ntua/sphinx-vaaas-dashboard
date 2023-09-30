@@ -1,0 +1,94 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+
+.main_content {
+  min-height: 100%;
+}
+
+.active {
+  background-color: #007169;
+}
+
+.menubar {
+  min-height: 100px;
+  background-color: #00A79D
+}
+
+.menuItem {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.v-center:hover {
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background-color: #007169;
+  cursor: pointer;
+}
+
+nz-row, nz-col {
+  margin: 0;
+  padding: 0;
+}
+
+//div, nz-col {
+//  border-style: solid;
+//  border-color: red;
+//  border-width: 0.1px;
+//}
+
+.v-center {
+  //position: relative;
+  //top: 50%;
+  //-ms-transform: translateY(-50%);
+  //transform: translateY(-50%);
+  color: #00A79D;
+}
+
+.h-v-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+//img {
+//  max-width: 80%;
+//  max-height: 100%;
+//  display: block;
+//}
+//.container  {
+//  max-height: 100%;
+//  min-height:100%;
+//  //position: relative;
+//}
+.content {
+  margin: 2%;
+  background-color: #D1D3D4;
+  border-radius: 5px;
+  //height: 60.6vh;
+
+}
+
+
+.footer {
+  background-color: #211F1B;
+  //position: absolute;
+  //width: 100%;
+  //bottom: 0;
+  //display: flex;
+  //align-items: end;
+}
+
+.whole {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.hoverable:hover {
+  cursor: pointer;
+}

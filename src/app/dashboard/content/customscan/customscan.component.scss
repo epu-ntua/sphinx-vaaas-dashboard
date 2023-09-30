@@ -1,0 +1,31 @@
+.scanbuttons {
+
+}
+
+.scanbuttons:hover {
+  cursor: pointer;
+}
+
+nz-progress {
+  //margin-right: 10px!important;
+  padding-right: 10px !important;
+}
+
+.key {
+  font-size: 8pt;
+  font-weight: bold
+}
+
+.value {
+  font-size: 8pt;
+  font-style: italic;
+  text-align: justify;
+}
+
+.hidden_el {
+  //visibility: hidden;
+}
+
+.visible_el {
+  //visibility: visible;
+}

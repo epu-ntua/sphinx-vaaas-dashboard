@@ -1,0 +1,13 @@
+
+<div nz-row class="menubar">
+  <div nz-col [nzLg]="(24 - (returnFloor(24/menuItems.length)*menuItems.length))/2"
+       [nzXl]="(24 - ( returnFloor(24/menuItems.length)*menuItems.length))/2" nzSm="0" nzMd="0"
+       nzXs="0"></div>
+  <div class="menuItem" nz-col nzXs="24" nzSm="24" nzMd="24" [nzLg]="returnWidth(menuItems.length)"
+       [nzXl]="returnWidth(menuItems.length)" *ngFor="let item of menuItems;index as i" style="text-align: center"
+       [ngClass]="router.url===item.URL?'active':''" (click)="goToUrl(item?.URL)">
+    <i nz-icon nzType="{{item?.icon}}" nzTheme="outline"></i> {{ item?.label}}
+  </div>
+
+
+</div>

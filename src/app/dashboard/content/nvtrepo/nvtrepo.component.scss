@@ -1,0 +1,50 @@
+//.nvtrepobar {
+//  display: flex !important;
+//  justify-content: center;
+//  align-items: center;
+//  font-size: 20px;
+//}
+//.form nz-form-item {
+//  margin-right: 16px;
+//  margin-bottom: 8px;
+//}
+//
+//th {
+//  background-color: #00A79D;
+//
+//}
+//::ng-deep .ant-table {
+//  background-color: #00A79D;
+//}
+::ng-deep .ant-table table {
+//  background-color: #00A79D;
+background-color: #D1D3D4;
+} //// edw edit to content xrwma
+
+
+.search-box {
+   padding: 1px;
+ }
+//
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.search-box button {
+  width: 90px;
+  color: #FFFFFF;
+}
+
+.search-button {
+  margin-right: 8px;
+  color: #D1D3D4;
+  background-color: #00A79D;
+}
+.reset-button {
+  background-color: #00A79D;
+}
+nz-filter-trigger{
+  align-items: left;
+}

@@ -1,0 +1,261 @@
+<nz-row>
+  <nz-col nzSpan="8" style="background-color: #00A79D;align-items: center;justify-content: center;display: flex">
+    <b>{{ taskList.length}} Tasks Found</b>
+  </nz-col>
+  <nz-col nzSpan="8" style="background-color: #00A79D;align-items: center;justify-content: center;display: flex">
+    <nz-input-group [nzSuffix]="suffixReset" [nzPrefix]="prefixFilter"
+                    style="background-color: #fafafa;width: 50%;margin-top: 10px">
+      <input type="text" style="background-color: #fafafa; color:#949494" nz-input (keyup)="search()"
+             placeholder="Search Targets" [(ngModel)]="searchString"/>
+    </nz-input-group>
+    <ng-template #prefixFilter>
+      <i nz-icon nz-tooltip="Search" style="font-size: 15px;cursor: pointer;color:#000000" nzType="file-search"
+         nzTheme="outline" (keydown)="search()"
+         (click)="search()"></i></ng-template>
+    <ng-template #suffixReset>
+      <i nz-icon nz-tooltip="Clear" nzType="close" nzTheme="outline"
+         style="font-size: 15px;cursor: pointer;color:#000000" (keydown)="reset()"
+         (click)="reset()"></i>
+    </ng-template>
+  </nz-col>
+  <nz-col nzSpan="8" style="background-color: #00A79D;align-items: center;justify-content: center;display: flex">
+    <nz-col nzSpan="12" style="align-items: center;justify-content: center;display: flex">
+      <button nz-tooltip="Create New Target" nz-button style="margin-top: 10px;color: #D1D3D4;background-color: #000c17" (click)="showCreateTaskModal()">
+        <i nz-icon nzType="plus" nzTheme="outline"></i>Create
+      </button>
+    </nz-col>
+    <nz-col nzSpan="12" style="align-items: center;justify-content: center;display: flex">
+      <button nz-tooltip="Create New Target" nz-button style="margin-top: 10px;color: #D1D3D4;background-color: #000c17"
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure you want to initiate a network-wide scan?"
+
+              (nzOnConfirm)="scan_all_targets()"
+              (nzOnCancel)="cancelDelete()">
+        Scan All
+      </button>
+    </nz-col>
+
+    <!--    <button nz-tooltip="Delete Targets" nz-button style="margin-top: 10px;margin-left: 25px;color: #D1D3D4;background-color: #000c17">-->
+    <!--      <i nz-icon nzType="minus" nzTheme="outline"></i>Delete-->
+    <!--    </button>-->
+  </nz-col>
+</nz-row>
+
+
+<nz-table #nzTable [nzData]="taskList" nzTableLayout="auto" nzShowPagination nzShowSizeChanger [nzLoading]="loading">
+  <thead>
+  <tr>
+    <th nzAlign="center" style="background-color: #00A79D">Name</th>
+    <th nzAlign="center" style="background-color: #00A79D">Target(s)</th>
+    <!--    <th nzAlign="center" style="background-color: #00A79D">Scan Profile</th>-->
+    <!--    <th nzAlign="center" style="background-color: #00A79D">Status</th>-->
+    <th nzAlign="center" style="background-color: #00A79D">Progress</th>
+    <th nzAlign="center" style="background-color: #00A79D">CVSS</th>
+    <th nzAlign="center" style="background-color: #00A79D"> Report</th>
+    <!--    <th nzAlign="center" style="background-color: #00A79D"> CVSS</th>-->
+    <th nzAlign="center" style="background-color: #00A79D" nzCustomFilter> Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let task of nzTable.data">
+    <td nzAlign="center" *ngIf="!(task?.name === undefined)">{{ task?.name }}</td>
+    <td nzAlign="center" *ngIf="!(task?.processes === undefined)">{{ task?.target }}</td>
+    <td nzAlign="center" *ngIf="!(task?.processes === undefined)">
+      <!--      <nz-progress nzType="circle" [nzWidth]="25" [nzPercent]="task?.processes['ARP Ping Scan']?.status=='ended'?100:task?.processes['ARP Ping Scan']?.progress|toInt" nzSize="small" nzTooltipTitle="ARP Ping Scan" nz-tooltip></nz-progress>-->
+      <nz-progress nzType="circle" [nzWidth]="25" [nzPercent]="task?.processes['NSE']?.status=='ended'?100:task?.processes['NSE']?.progress|toInt" nzSize="small" nzTooltipTitle="NSE" nz-tooltip></nz-progress>
+      <nz-progress nzType="circle" [nzWidth]="25" [nzPercent]="task?.processes['Parallel DNS resolution of 1 host.']?.status=='ended'?100:task?.processes['Parallel DNS resolution of 1 host.']?.progress|toInt" nzSize="small" nzTooltipTitle="Parallel DNS resolution of 1 host" nz-tooltip></nz-progress>
+      <nz-progress nzType="circle" [nzWidth]="25" [nzPercent]="task?.processes['Service scan']?.status=='ended'?100:task?.processes['Service scan']?.progress|toInt" nzSize="small" nzTooltipTitle="Service Scan" nz-tooltip></nz-progress>
+      <nz-progress nzType="circle" [nzWidth]="25" [nzPercent]="task?.processes['SYN Stealth Scan']?.status=='ended'?100:task?.processes['SYN Stealth Scan']?.progress|toInt" nzSize="small" nzTooltipTitle="SYN Stealth Scan" nz-tooltip></nz-progress>
+    </td>
+    <td #cvss nzAlign="center">
+      {{task?.report}}
+      <nz-tag style="background:{{getTdValue(cvss)|cvssV3Color}}">{{task?.reports|getReportCvss}}</nz-tag>
+    </td>
+    <td nzAlign="center">
+      <nz-select [(ngModel)]="selectedReport" name="task_reports" nzPlaceHolder="Task Reports" (ngModelChange)="showVaaasReportDialog()">
+        <nz-option *ngFor="let r of task|getReportsIDs" [nzLabel]="get_report_date(r?.label)" [nzValue]="r?.value">{{get_report_date(r?.label)}}></nz-option>
+      </nz-select>
+    </td>
+    <!--    <td>-->
+    <!--      <nz-progress nzPercent="0" nz-tooltip nzTooltipTitle="CVSS V3" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#FA1E4E' }"></nz-progress>-->
+    <!--      <nz-progress nzPercent="0" nz-tooltip nzTooltipTitle="CVSS V2" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#FA1E4E' }"></nz-progress>-->
+    <!--    </td>-->
+    <td>
+      <div style="display: flex;justify-content: space-evenly;">
+        <i class="hoverable" nz-icon nzType="sync" class="scanbuttons" nzTheme="outline" nzTooltipTitle="Refresh" nzTooltipPlacement="topCenter" nz-tooltip (click)="_getTasks()"></i>
+        <i nz-icon nzType="play-square" class="scanbuttons" nzTooltipTitle="Restart Scan" nzTooltipPlacement="topCenter" nz-tooltip nzTheme="outline"
+           nz-popconfirm
+           nzPopconfirmTitle="Are you sure you want to restart this task?"
+           (nzOnConfirm)="restartTask(task)"></i>
+        <i nz-icon nzType="stop" class="scanbuttons" nzTooltipTitle="Stop Scan" nzTooltipPlacement="topCenter" nz-tooltip nzTheme="outline"></i>
+        <i nz-icon nzType="delete" class="scanbuttons" nzTooltipTitle="Delete Scan" nzTooltipPlacement="topCenter" nz-tooltip nzTheme="outline"
+           nz-popconfirm
+           nzPopconfirmTitle="Are you sure delete this task?"
+
+           (nzOnConfirm)="_deleteTask(task?.name)"
+           (nzOnCancel)="cancelDelete()">
+        </i>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal [(nzVisible)]="showCreateTaskDialog" nzTitle="New Scan" nzClosable (nzOnCancel)="hideCreateTargetModal()">
+  <form nz-form nzLayout="vertical" #newScanForm="ngForm">
+    <!--    NAME   -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzRequired><b>Name </b></nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please input task name!">
+        <input [(ngModel)]="newTask.name" nz-input name="text" id="targetname" placeholder="enter task name" required>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    TARGETS -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired nzFor="text"><b>Target</b></nz-form-label>
+      <nz-form-control [nzSpan]="24">
+        <nz-row>
+          <nz-col [nzSpan]="12">
+            <nz-select [(ngModel)]="newTask.target" nzShowSearch nzAllowClear name="target_profile" nzPlaceHolder="Target Profile" required>
+              <nz-option *ngFor="let asset of assetsIPs" [nzLabel]="asset"
+                         [nzValue]="asset"></nz-option>
+            </nz-select>
+          </nz-col>
+          <!--          <nz-col [nzSpan]="12">-->
+          <!--            <button nz-button style="background-color: #00A79D;margin-left: 10px" nzType="primary"><i nz-icon nzType="plus"></i></button>-->
+          <!--          </nz-col>-->
+        </nz-row>
+
+      </nz-form-control>
+    </nz-form-item>
+
+    <!--    SCRIPTS -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired nzFor="text"><b>Script</b></nz-form-label>
+      <nz-form-control [nzSpan]="24">
+        <nz-row>
+          <nz-col [nzSpan]="12">
+            <nz-select [(ngModel)]="newTask.script" nzShowSearch nzAllowClear name="target_profile" nzPlaceHolder="Target Profile" required>
+              <nz-option *ngFor="let script of scriptsListItems" [nzLabel]="script.label"
+                         [nzValue]="script.value"></nz-option>
+            </nz-select>
+          </nz-col>
+          <!--          <nz-col [nzSpan]="12">-->
+          <!--            <button nz-button style="background-color: #00A79D;margin-left: 10px" nzType="primary"><i nz-icon nzType="plus"></i></button>-->
+          <!--          </nz-col>-->
+        </nz-row>
+
+      </nz-form-control>
+    </nz-form-item>
+
+    <!--    SPEED -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzRequired nzFor="text"><b>Task Speed ({{task_speed_matrix[newTask.speed - 1]}})</b></nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number style="width: 100%" name="task_speed" [(ngModel)]="newTask.speed" [nzMin]="1" [nzMax]="5" [nzStep]="1" required></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="hideCreateTargetModal()">Cancel</button>
+      <button nz-button nzType="primary" (click)="createNewTask(newTask)" [disabled]="!newScanForm.form.valid">Create</button>
+    </div>
+  </form>
+  <!--  (nzOnCancel)="cancelNewScan(newScanForm)" (nzOnOk)="createNewScan(newScanForm)"-->
+</nz-modal>
+
+<nz-modal [(nzVisible)]="showDownloadReport" nzTitle="Download the Report">
+  <form nz-form nzLayout="vertical" #downloadReportForm="ngForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzRequired><b>Report Format </b></nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please select report format">
+        <nz-select [(ngModel)]="selectedReportFormat" name="report_format" nzPlaceHolder="Select Report Profile" required>
+          <nz-option *ngFor="let option of report_format_ids" [nzLabel]="option.label"
+                     [nzValue]="option.value"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelDownloadReport(downloadReportForm)">Cancel</button>
+    <button nz-button nzType="primary" (click)="downloadReport(downloadReportForm)" [disabled]="!downloadReportForm.form.valid">Download</button>
+  </div>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="showVaaasReport" nzTitle="VAaaS Report" nzClosable (nzOnCancel)="hideVaaasReportDialog()">
+  <div nz-row style="width: 100%" id="VaaasReport" #VaaasReport>
+    <div nz-col nzSpan="24" style="text-align: center"><h2>{{selectedReportStix?.task_name != '' ? selectedReportStix?.task_name : selectedReportStix?.id}}</h2></div>
+    <div nz-col nzSpan="24" style="text-align: left"><h4>Host Information</h4></div>
+    <div nz-col nzSpan="24" style="text-align: left">Assessment Date: {{selectedReportStix?.assessment_date}}</div>
+    <div nz-col nzSpan="24" style="text-align: left"></div>
+    <div nz-col nzSpan="24" style="text-align: left" *ngFor="let obj of selectedReportStix?.objects">
+      <div nz-col nzSpan="24" style="text-align: left" *ngIf="obj?.type=='ipv4-addr'">
+        <div nz-col nzSpan="24" style="text-align: left">IP Address: {{obj?.value}}</div>
+      </div>
+      <div nz-col nzSpan="24" style="text-align: left" *ngIf="obj?.type=='mac-addr'">
+        <div nz-col nzSpan="24" style="text-align: left">MAC Address: {{obj?.value}}</div>
+      </div>
+    </div>
+    <div nz-col nzSpan="24" style="text-align: left"><h4>CVSS Score</h4>
+      <h3>{{selectedReportStix?.cvss_score}}</h3></div>
+    <div nz-col nzSpan="24" style="text-align: left"><span style="font-weight: bold;font-size: 14px">Discovered Services</span> ({{selectedReportStix?.total_services ? selectedReportStix?.total_services : 0}})</div>
+    <div nz-col nzSpan="24" style="text-align: left" *ngFor="let obj of selectedReportStix?.objects">
+      <!--      List of discovered Services-->
+      <div nz-col nzSpan="24" style="text-align: left" *ngIf="obj?.type=='x-discovered-service'">
+        <div nz-col nzSpan="24" style="text-align: left"><h4>{{obj?.service_name.toUpperCase()}}</h4></div>
+        <div nz-col nzSpan="24" style="text-align: left">Service Product: {{obj?.service_product}}:{{obj?.service_product_version}}</div>
+        <div nz-col nzSpan="24" style="text-align: left">Port: {{obj?.port}}</div>
+        <div nz-col nzSpan="24" style="text-align: left">Protocol: {{obj?.protocol}}</div>
+        <div nz-col nzSpan="24" style="text-align: left">Status: {{obj?.state}}</div>
+        <div nz-col nzSpan="24" style="text-align: left" *ngIf="obj?.service_cpe_list?.length>0"><h5>CPE List</h5></div>
+        <div nz-col nzSpan="24" style="text-align: left" *ngFor="let cp of obj?.service_cpe_list;index as c">
+          <b>#{{c + 1}}: {{cp}}</b>
+        </div>
+        <h4>Script List ({{obj?.scripts_list?.length}})</h4>
+        <div nz-col nzSpan="24" style="text-align: left" *ngFor="let scr of obj?.scripts_list;index as scr_i">
+          <div nz-col nzSpan="24" style="text-align: left">
+            <b>{{scr_i + 1}}) {{scr?.id}}: </b>
+            <i>{{scr?.output[0]}}</i>
+            <!--            <div *ngFor="let out of scr?.output">-->
+            <!--              <i>{{out}}</i><br>-->
+            <!--            </div>-->
+          </div>
+          <div nz-col nzSpan="24" style="text-align: left" *ngFor="let cve of getReportOutput(scr);index as cvi">
+            <div nz-col nzSpan="24" style="text-align: left" [id]=" (scr?.id=='vulners')?'':'hidden'" [hidden]="!(scr?.id=='vulners')">
+              <ul>
+                <li nz-col nzSpan="24" style="text-align: left"><span class="key">CVE ID:</span> <span class="value"> {{ cve[0]}}</span></li>
+                <li nz-col nzSpan="24" style="text-align: left"><span class="key">CVSS Score:</span> <span class="value"> {{ cve[1]}}</span></li>
+                <li nz-col nzSpan="24" style="text-align: left"><span class="key">CVE Link:</span> <span class="value"><a href="{{cve[2]}}"> {{ cve[2]}}</a></span></li>
+                <li nz-col nzSpan="24" style="text-align: left"><span class="key">CVE Type: </span> <span class="value"> {{ cve[3]}}</span></li>
+              </ul>
+            </div>
+            <!--            <div nz-col nzSpan="24" style="text-align: left" [id]=" (scr?.id=='vulscan')?'':'hidden'" [hidden]="!(scr?.id=='vulscan')">-->
+            <!--              <ul>-->
+            <!--                <li nz-col nzSpan="24" style="text-align: left"><span class="key">CVE ID:</span> <span class="value"> {{ cve[0]?.replace('[', '')}}</span></li>-->
+            <!--                <li nz-col nzSpan="22" style="text-align: left;text-justify: distribute"><span class="key">Description:</span> <span class="value"> {{ cve[1]}}</span></li>-->
+            <!--              </ul>-->
+            <!--            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div nz-col nzSpan="24">
+      <hr>
+    </div>
+    <h3>Host Scripts</h3>
+    <div nz-col nzSpan="24" style="text-align: left" *ngFor="let obj of selectedReportStix?.objects;index as obj_i">
+      <div nz-col nzSpan="24" style="text-align: left" *ngIf="obj?.type=='x-host-script'">
+        <ul>
+          <li nz-col nzSpan="24" style="text-align: left"><span class="key">ID:</span> <span class="value"> {{ obj?.id}}</span></li>
+          <li nz-col nzSpan="24" style="text-align: left"><span class="key">Output:</span> <span class="value"> {{ obj?.output}}</span></li>
+          <li nz-col nzSpan="24" style="text-align: left"><span class="key">Elements:</span> <span class="value"> {{ get_json_2_string(obj?.elements)}}</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="hideVaaasReportDialog()">Cancel</button>
+    <button nz-button nzType="primary" (click)="exportAsPDF('VaaasReport')">Save PDF</button>
+  </div>
+</nz-modal>

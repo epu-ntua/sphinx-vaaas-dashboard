@@ -1,0 +1,82 @@
+<div nz-row style="background-color: #00A79D;">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="6" nzXl="6" style="height:25px;font-size: 18px">
+    <!--       *ngFor="let item of homeItems;index as i">-->
+    <!--    <i nz-icon nzType="{{item?.icon}}" nzTheme="outline"></i> {{ item?.label}}{{item?.value ? item?.value : 0}}-->
+    <!--    <i nz-icon nzType="pie-chart" nzTheme="outline"></i>tt-->
+  </div>
+</div>
+<div nz-row style="margin-bottom: 20px">
+  <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px">
+    <nz-card nzTitle="Assets" [nzExtra]="extraTemplate">
+      <p style="font-size: xx-large;margin: 0;padding: 0">{{homeItems[0]?.value}}</p>
+    </nz-card>
+    <ng-template #extraTemplate>
+      <nz-avatar nzIcon="global" style="background-color: dodgerblue"></nz-avatar>
+    </ng-template>
+  </div>
+  <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px">
+    <nz-card nzTitle="Assessments" [nzExtra]="extraTemplate2">
+      <p style="font-size: xx-large;margin: 0;padding: 0">{{homeItems[1]?.value}}</p>
+    </nz-card>
+    <ng-template #extraTemplate2>
+      <nz-avatar nzIcon="security-scan" style="background-color: darkslateblue"></nz-avatar>
+    </ng-template>
+  </div>
+  <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px">
+    <nz-card nzTitle="Reports" [nzExtra]="extraTemplate3">
+      <p style="font-size: xx-large;margin: 0;padding: 0">{{homeItems[2]?.value}}</p>
+    </nz-card>
+    <ng-template #extraTemplate3>
+      <nz-avatar nzIcon="bar-chart" style="background-color: darkorange"></nz-avatar>
+    </ng-template>
+  </div>
+  <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" nzXl="6" style="padding: 10px">
+    <nz-card nzTitle="Alerts" [nzExtra]="extraTemplate4">
+      <p style="font-size: xx-large;margin: 0;padding: 0">{{homeItems[3]?.value}}</p>
+    </nz-card>
+    <ng-template #extraTemplate4>
+      <nz-avatar nzIcon="exclamation-circle" style="background-color: #cf0c4b"></nz-avatar>
+    </ng-template>
+  </div>
+  <div nz-col nzSpan="24" style="display: flex;font-size: 12px;width: 100%">
+    <!--      [view]="view"-->
+    <!--      [scheme]="colorScheme"-->
+    <!--    [labelFormatting]="labelFormatting"-->
+    <!--    [valueFormatting]="valueFormatting"-->
+    <!--    <div nz-row nzSpan="24" style="width: 100%">-->
+    <ngx-charts-tree-map
+      *ngIf="tree_chart_data.length > 0"
+      [results]=tree_chart_data
+      [gradient]="gradient"
+      [animations]="animations"
+      [scheme]="'aqua'"
+      (select)="onSelect($event)">
+    </ngx-charts-tree-map>
+  </div>
+</div>
+<div nz-row>
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzXl="24" class="homeItem" style="display: flex;font-size: 12px">
+    <!--    (activate)="onActivate($event)"-->
+    <!--    (deactivate)="onDeactivate($event)"-->
+    <!--      [timeline]="timeline"-->
+    <!--      [autoScale]="true"-->
+    <ngx-charts-bar-vertical-stacked
+      *ngIf="multi.length > 0"
+      [scheme]="'aqua'"
+      [legend]="legend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="xAxis"
+      [yAxis]="yAxis"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [results]="multi"
+      [animations]="true"
+      (select)="onSelect($event)">
+    </ngx-charts-bar-vertical-stacked>
+  </div>
+  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12" class="homeItem" style="display: flex;font-size: 12px">
+
+  </div>
+</div>
+

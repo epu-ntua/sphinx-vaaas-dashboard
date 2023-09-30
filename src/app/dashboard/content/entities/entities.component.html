@@ -1,0 +1,65 @@
+
+
+<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="auto" [nzPageSize]="[10]">
+
+  <thead >
+  <tr>
+    <th nzAlign="center" style="background-color: #00A79D">IP</th>
+    <th nzAlign="center" style="background-color: #00A79D">MAC </th>
+    <th nzAlign="center"  style="background-color: #00A79D">HostName</th>
+    <th nzAlign="center"  style="background-color: #00A79D">OS</th>
+    <th nzAlign="center"  style="background-color: #00A79D">CVSS</th>
+    <th nzAlign="center"  style="background-color: #00A79D">Date</th>
+    <th nzAlign="center"  style="background-color: #00A79D" nzCustomFilter>
+<!--      <nz-filter-trigger   [nzDropdownMenu]="menu">-->
+<!--        <i style="align-self: center" nz-icon nzType="search" style="color: #211F1B "></i>-->
+<!--      </nz-filter-trigger>-->
+      Actions
+    </th>
+
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of nzTable.data">
+    <td nzAlign="center" >{{ data.IP }}</td>
+    <td nzAlign="center" >{{ data.MAC }}</td>
+    <td nzAlign="center" >{{ data.hostname }}</td>
+    <td nzAlign="center" >{{ data.OS}}</td>
+    <td nzAlign="center" >
+      <nz-progress nzPercent=" {{ data.severity }}" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#FA1E4E' }"></nz-progress>
+    </td>
+    <td nzAlign="center" >{{ data.modified }}</td>
+    <td>
+      <div style="display: flex;justify-content: space-evenly;">
+<!--        <button id="remove" (click)="deleteRow(data.id)">DELETE ROW</button>-->
+<!--        <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.id)">Delete</a>-->
+        <i nz-icon nzType="edit" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.id)"></i>
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        <i nz-icon nzType="export" nzTheme="outline"></i>
+      </div>
+    </td>
+<!--    <td>-->
+<!--      <i nz-icon nzType="delete" nzTheme="outline"></i>-->
+<!--      <i nz-icon nzType="edit" nzTheme="outline"></i>-->
+<!--      <i nz-icon nzType="export" nzTheme="outline"></i>-->
+<!--    </td>-->
+<!--    <td >-->
+<!--      <a  nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.IP)">Delete</a>-->
+<!--    </td>-->
+  </tr>
+  </tbody>
+
+<!--</nz-table>-->
+
+<!--<nz-dropdown-menu #menu="nzDropdownMenu">-->
+<!--    <div class="ant-table-filter-dropdown">-->
+<!--      <div class="search-box">-->
+<!--        <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />-->
+<!--        <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">-->
+<!--          Search-->
+<!--        </button>-->
+<!--        <button nz-button nzSize="small" (click)="reset()" class="reset-button">Reset</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </nz-dropdown-menu>-->
+</nz-table>

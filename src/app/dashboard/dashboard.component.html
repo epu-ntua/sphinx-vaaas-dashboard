@@ -1,0 +1,26 @@
+<!--<div class="main_content" nz-row>-->
+<!--  <div nz-col nzSpan="24">-->
+<!--    <app-header></app-header>   &lt;!&ndash; 24&ndash;&gt;-->
+<!--    <app-menubar></app-menubar>&lt;!&ndash; 24&ndash;&gt;-->
+<!--    <div class="content" nz-row>-->
+<!--      <div nz-col nzSpan="24">-->
+
+<!--        <router-outlet></router-outlet>-->
+<!--      </div>-->
+
+<!--    </div>-->
+<!--    <div>-->
+<!--      <app-footer></app-footer>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<div class="whole">
+  <app-header></app-header>
+  <app-menubar></app-menubar>
+  <main class="content" style="flex:1">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer></app-footer>
+</div>

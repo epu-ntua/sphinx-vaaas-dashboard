@@ -1,0 +1,266 @@
+<div nz-row>
+  <div nz-col nzXs="8" nzSm="8" nzMd="8" nzLg="8" nzXl="8"
+       style="background-color: #00A79D;align-items: center;justify-content: center;display: flex; ">
+    <b>{{ assetsList.length}} Assets Found</b>
+  </div>
+  <div nz-col nzXs="8" nzSm="8" nzMd="8" nzLg="8" nzXl="8"
+       style="background-color: #00A79D;align-items: center;justify-content: center;display: flex">
+    <nz-input-group [nzSuffix]="suffixReset" [nzPrefix]="prefixFilter"
+                    style="background-color: #fafafa;width: 50%;margin-top: 10px">
+      <input type="text" style="background-color: #fafafa; color:#949494" nz-input (keyup)="search()"
+             placeholder="Search Targets" [(ngModel)]="searchString"/>
+    </nz-input-group>
+    <ng-template #prefixFilter>
+      <i nz-icon nz-tooltip="Search" style="font-size: 15px;cursor: pointer;color:#000000" nzType="file-search"
+         nzTheme="outline" (keydown)="search()"
+         (click)="search()"></i></ng-template>
+    <ng-template #suffixReset>
+      <i nz-icon nz-tooltip="Clear" nzType="close" nzTheme="outline"
+         style="font-size: 15px;cursor: pointer;color:#000000" (keydown)="reset()"
+         (click)="reset()"></i>
+    </ng-template>
+  </div>
+
+
+  <div nz-col nzXs="8" nzSm="8" nzMd="8" nzLg="8" nzXl="8"
+       style="background-color: #00A79D; align-items: center;justify-content: center;display: flex;">
+    <div nz-col nzSpan="12" style="align-items: center;justify-content: center;display: flex;">
+      <button nz-tooltip="Create New Target" nz-button style="margin-top: 10px;color: #D1D3D4;background-color: #000c17"
+              (click)="_showCreateAssetDialog()"><i nz-icon nzType="plus" nzTheme="outline"></i>Create
+      </button>
+    </div>
+    <div nz-col nzSpan="12" style="align-items: center;justify-content: center;display: flex;">
+      <button nz-tooltip="Create New Target" nz-button style="margin-top: 10px;color: #D1D3D4;background-color: #000c17"
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure you want to initiate a network-wide ip scan?"
+              nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="discover_all_assets()"
+              (nzOnCancel)="cancelDelete()">Discover All
+
+      </button>
+    </div>
+    <!--    <button nz-tooltip="Delete Targets" nz-button-->
+    <!--            style="margin-top: 10px;margin-left: 25px;color: #D1D3D4;background-color: #000c17"><i nz-icon nzType="minus" nzTheme="outline"></i>Delete-->
+    <!--    </button>-->
+  </div>
+</div>
+
+<div nz-col nzSpan="24">
+  <nz-table nzTableLayout="auto" nzShowPagination nzShowSizeChanger #nzTable [nzData]="assetsList" [nzLoading]="loading">
+
+    <thead>
+    <tr>
+      <!--      <th nzAlign="center" style="background-color: #00A79D">Name</th>-->
+      <!--      <th nzAlign="center" style="background-color: #00A79D">Description</th>-->
+      <th nzAlign="center" style="background-color: #00A79D">OS</th>
+      <th nzAlign="center" style="background-color: #00A79D">Type</th>
+      <th nzAlign="center" style="background-color: #00A79D">IP</th>
+      <th nzAlign="center" style="background-color: #00A79D">MAC</th>
+      <!--      <th nzAlign="center" style="background-color: #00A79D">Assessed</th>-->
+      <!--      <th nzAlign="center" style="background-color: #00A79D">CVSS</th>-->
+      <th nzAlign="center" style="background-color: #00A79D">Modified</th> <!--TODO put sorting-->
+      <!--      <th nzAlign="center" style="background-color: #00A79D">Status</th>-->
+      <!--      <th nzAlign="center" style="background-color: #00A79D">Value</th>-->
+      <!--      <th nzAlign="center" style="background-color: #00A79D">Active</th>-->
+      <th nzAlign="center" style="background-color: #00A79D">Vendor</th>
+      <th nzAlign="center" style="background-color: #00A79D">Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let asset of nzTable.data">
+      <!--      <td nzBreakWord>{{ asset?.name }}</td>-->
+      <!--      <td nzBreakWord>{{ asset?.description }}</td>-->
+      <td nzAlign="center">{{ asset?.os?.os_name }}</td>
+      <td nzAlign="center">{{ asset?.assetType }}</td>
+      <!--      <td nzAlign="center">{{ (asset?.os?.os_classes?.length > 0) ? asset?.os?.os_classes[0]?.osclass?.type : '' }}</td>-->
+      <td nzAlign="center">{{ asset?.ip}}</td>
+      <td nzAlign="center">{{ asset?.mac}}</td>
+      <!--      <td nzAlign="center">{{ asset?.assessed}}</td>-->
+      <!--      <td nzAlign="center">{{ asset?.cvss}}</td>-->
+      <td nzAlign="center">{{ asset?.modified?.$date|date:'dd/MM/yy hh:mm'}}</td>
+      <!--      <td nzAlign="center">{{ asset?.status}}</td>-->
+      <!--      <td nzAlign="center">{{ asset?.assetValue}}</td>-->
+      <!--      <td nzAlign="center">{{ asset?.active}}</td>-->
+      <td nzAlign="center">{{ asset?.vendor}}</td>
+
+      <!--              <td nzAlign="center" > <nz-progress [nzPercent]="data.progress" nzType="circle"  [nzWidth]="30" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#00A79D' }"></nz-progress></td>-->
+      <td>
+        <div style="display: flex;justify-content: space-evenly;">
+          <i nz-icon nzType="edit" class="scanbuttons" nzTooltipTitle="Edit" nzTooltipPlacement="topCenter" nz-tooltip nzTheme="outline" (click)="showEditAssetDialog(asset)"></i>
+          <i nz-icon nzType="delete" class="scanbuttons" nzTooltipTitle="Delete" nzTooltipPlacement="topCenter" nz-tooltip nzTheme="outline"
+             nz-popconfirm
+             nzPopconfirmTitle="Are you sure delete this task?"
+             nzPopconfirmPlacement="bottom"
+             (nzOnConfirm)="_deleteAsset(asset)"
+             (nzOnCancel)="cancelDelete()">
+          </i><!--(nzOnConfirm)="_deleteTarget(data)"-->
+          <!--          <i nz-icon nzType="delete" class="scanbuttons"  nzTooltipTitle="Delete Scan" nzTooltipPlacement="topCenter" nz-tooltip nzTheme="outline"></i>-->
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<nz-modal [(nzVisible)]="showCreateAssetModal" nzClosable (nzOnCancel)="hideCreateAssetDialog()" nzTitle="Create New Target">
+  <form #_newTargetForm="ngForm" nz-form nzLayout="vertical">
+    <!--    Name-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Name</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="new_asset.name" nz-input name="aname" id="aname" placeholder="asset name">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Description-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Description</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="new_asset.description" nz-input name="adesc" id="adesc" placeholder="asset description">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Type-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Type</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="new_asset.assetType" nz-input name="atype" id="atype" placeholder="asset type">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    IP -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14" nzRequired><b>IP</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="new_asset.ip" nz-input name="aip" id="aip" placeholder="asset IP e.g., 10.0.0.1" required>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    MAC -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14" nzRequired><b>MAC</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="new_asset.mac" nz-input name="amac" id="amac" placeholder="asset MAC e.g., 01:23:45:67:89:AB" required>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Assessed -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Assessed</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <label nz-checkbox name="aassessed" id="aassessed" [(ngModel)]="new_asset.assessed"></label>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Status -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Status</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <label nz-checkbox name="astat" id="astat" [(ngModel)]="new_asset.status"></label>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Value-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Value (0 - 10)</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="new_asset.assetValue" nz-input name="avalue" id="avalue" placeholder="asset value">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Active -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Active</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <label nz-checkbox name="aact" id="aact" [(ngModel)]="new_asset.active"></label>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Vendor-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Vendor</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="new_asset.vendor" nz-input name="avendor" id="avendor" placeholder="asset vendor">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    FOOTER -->
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="hideCreateAssetDialog()">Cancel</button>
+      <button nz-button nzType="primary" (click)="createAsset(_newTargetForm.form.valid)" [disabled]="!_newTargetForm.form.valid">Create</button>
+    </div>
+  </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="showEditAssetModal" nzTitle="Edit Asset" nzClosable (nzOnCancel)="hideEditAssetDialog()">
+  <form #_editTargetForm="ngForm" nz-form nzLayout="vertical">
+    <!--    NAME  -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Name</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="editAssetBuffer.name" nz-input name="bname" id="bname" placeholder="asset name">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Description-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Description</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="editAssetBuffer.description" nz-input name="bdesc" id="bdesc" placeholder="asset description">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Type-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Type</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="editAssetBuffer.assetType" nz-input name="btype" id="btype" placeholder="asset type">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    IP -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14" nzRequired><b>IP</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="editAssetBuffer.ip" nz-input name="bip" id="bip" placeholder="asset IP e.g., 10.0.0.1" required>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    MAC -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14" nzRequired><b>MAC</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="editAssetBuffer.mac" nz-input name="bmac" id="bmac" placeholder="asset MAC e.g., 01:23:45:67:89:AB" required>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Assessed -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Assessed</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <label nz-checkbox name="bassessed" id="bassessed" [(ngModel)]="editAssetBuffer.assessed"></label>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Status -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Status</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <label nz-checkbox name="bstat" id="bstat" [(ngModel)]="editAssetBuffer.status"></label>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Value-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Value (0 - 10)</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="editAssetBuffer.assetValue" nz-input name="bvalue" id="bvalue" placeholder="asset value">
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Active -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Active</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <label nz-checkbox name="bact" id="bact" [(ngModel)]="editAssetBuffer.active"></label>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    Vendor-->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="14"><b>Vendor</b></nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input [(ngModel)]="editAssetBuffer.vendor" nz-input name="bvendor" id="bvendor" placeholder="asset vendor">
+      </nz-form-control>
+    </nz-form-item>
+
+
+    <!--    FOOTER -->
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="hideEditAssetDialog()">Cancel</button>
+      <button nz-button nzType="primary" (click)="updateAsset(_editTargetForm.form.valid, editAssetBuffer)" [disabled]="!_editTargetForm.form.valid">Update</button>
+    </div>
+  </form>
+</nz-modal>

@@ -1,0 +1,12 @@
+::ng-deep .ant-table table {
+  //  background-color: #00A79D;
+  background-color: #D1D3D4;
+}
+nz-progress{
+  //margin-right: 8px;
+  //margin-bottom: 8px;
+  //display: inline-block;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}

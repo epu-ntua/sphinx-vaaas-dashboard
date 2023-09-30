@@ -1,0 +1,144 @@
+<!--<div nz-row class="component" style="margin-top:5%; margin-left: 20%;margin-right: 20%">-->
+<!--  &lt;!&ndash;  <div nz-row [nzGutter]="24">&ndash;&gt;-->
+<!--  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" nzXl="12" class="homeItem">-->
+<!--    <form nz-form>-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzSpan]="8" nzRequired nzFor="text"><b>Name</b></nz-form-label>-->
+<!--        <nz-form-control [nzSpan]="8">-->
+<!--          <input  nz-input [(ngModel)]="new_task.name" name="text" id="text" placeholder="Name">-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div nz-row class="component" style="margin-left: 20%;margin-right: 20%;margin-top: 1%">-->
+<!--  <div nz-col nzXs="22" nzSm="22" nzMd="12" nzLg="12" nzXl="12" class="homeItem">-->
+<!--    <form nz-form>-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzSpan]="8" nzRequired nzFor="text"><b>Targets</b></nz-form-label>-->
+<!--        <nz-form-control [nzSpan]="8">-->
+<!--          <nz-select [(ngModel)]="new_task.target_id" name="select-error" nzPlaceHolder="Target Profile">-->
+<!--            <nz-option *ngFor="let option of targetListItems" [nzLabel]="option.label"-->
+<!--                       [nzValue]="option.value" ></nz-option>-->
+<!--          </nz-select>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </form>-->
+
+<!--  </div>-->
+<!--  <div nz-col nzXs="2" nzSm="2" nzMd="12" nzLg="12" nzXl="8">-->
+<!--    <button nz-button style="background-color: #00A79D" nzType="primary" (click)="_showTargetModal()"><i nz-icon nzType="plus"></i></button>-->
+<!--    <nz-modal [(nzVisible)]="createVisible" nzTitle="Create New Target" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">-->
+<!--      <form nz-form nzLayout="vertical">-->
+<!--        <nz-form-item>-->
+<!--          <nz-form-label [nzSpan]="14" nzRequired><b>Name </b></nz-form-label>-->
+<!--          <nz-form-control [nzSpan]="16">-->
+<!--            <input  [(ngModel)]="new_target.name" nz-input name="text" id="targetname" placeholder="pasiphae-group">-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+<!--        <nz-form-item>-->
+<!--          <nz-form-label [nzSpan]="14" nzRequired><b>Hosts</b></nz-form-label>-->
+<!--          <nz-form-control [nzSpan]="16">-->
+<!--            <nz-select [(ngModel)]="new_target.hosts" nzMode="tags" name="hosts" id="hostgroup" placeholder="[10.0.100.1]"></nz-select>-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+<!--        <nz-form-item>-->
+<!--          <nz-form-label [nzSpan]="8" nzRequired nzFor="text"><b>Ports</b></nz-form-label>-->
+<!--          <nz-form-control [nzSpan]="8">-->
+<!--            <nz-select [(ngModel)]="new_target.port_list_id" name="select-error" nzPlaceHolder="Select Port Profile">-->
+<!--              <nz-option  *ngFor="let option of portListItems" [nzLabel]="option.label"-->
+<!--                          [nzValue]="option.value"></nz-option>-->
+<!--            </nz-select>-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+<!--        <nz-form-item>-->
+<!--          <nz-form-label [nzSpan]="14" ><b>Comments </b></nz-form-label>-->
+<!--          <nz-form-control [nzSpan]="16">-->
+<!--            <input  [(ngModel)]="new_target.comment" nz-input name="comment" id="comment" placeholder="Premises Hosts">-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+<!--      </form>-->
+<!--    </nz-modal>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div nz-row class="component" style="margin-left: 20%;margin-top:1%;margin-right: 20%">-->
+<!--  <div nz-col nzXs="22" nzSm="22" nzMd="12" nzLg="12" nzXl="12" class="homeItem">-->
+<!--    <form nz-form>-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzSpan]="8"><b>Schedule</b></nz-form-label>-->
+<!--        <nz-form-control [nzSpan]="8">-->
+<!--          <nz-date-picker [nzDisabled]="this.checked" [nzSize]="size"-->
+<!--                          nzShowTime-->
+<!--                          nzFormat="yyyy-MM-dd HH:mm:ss"-->
+<!--                          nzPlaceHolder="Select Time"-->
+<!--                          ngModel-->
+<!--                          (ngModelChange)="onChange($event)"-->
+<!--                          (nzOnOk)="onOk($event)"-->
+<!--                          name="foo"-->
+<!--          ></nz-date-picker>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </form>-->
+<!--  </div>-->
+
+<!--  <div nz-col nzXs="2" nzSm="2" nzMd="12" nzLg="12" nzXl="8" style="margin-top: 5px">-->
+<!--    <label nz-checkbox [(ngModel)]="checked" (click)="Change()"><b>Now</b></label>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div nz-row class="component" style="margin-left: 20%;margin-top:1%;margin-right: 20%">-->
+<!--  <div nz-col nzXs="22" nzSm="22" nzMd="12" nzLg="12" nzXl="12" class="homeItem">-->
+<!--    <form nz-form>-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzSpan]="8" nzRequired nzFor="text"><b>Scan Profile</b></nz-form-label>-->
+<!--        <nz-form-control [nzSpan]="8">-->
+<!--          <nz-select [(ngModel)]="new_task.config_id" name="select-error" nzPlaceHolder="Scan Profile">-->
+<!--            <nz-option *ngFor="let option of profileListItems" [nzLabel]="option.label"-->
+<!--                       [nzValue]="option.value"></nz-option>-->
+<!--          </nz-select>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<div nz-row class="component" style="margin-left: 20%;margin-top:1%;margin-right: 20%">-->
+<!--  <div nz-col nzXs="22" nzSm="22" nzMd="12" nzLg="12" nzXl="12" class="homeItem">-->
+<!--    <form nz-form>-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzSpan]="8" nzRequired nzFor="text"><b>Scanners</b></nz-form-label>-->
+<!--        <nz-form-control [nzSpan]="8">-->
+<!--          <nz-select [(ngModel)]="new_task.scanner_id" name="select-error" nzPlaceHolder="Select Scanner">-->
+<!--            <nz-option *ngFor="let option of scannerListItems" [nzLabel]="option.label"-->
+<!--                       [nzValue]="option.value"></nz-option>-->
+<!--          </nz-select>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<div nz-row class="component" style="margin-top:1%">-->
+<!--  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="4" nzXl="4" class="homeItem">-->
+<!--  </div>-->
+<!--  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="4" nzXl="4" class="homeItem">-->
+<!--  </div>-->
+<!--  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="4" nzXl="4" class="homeItem">-->
+<!--  </div>-->
+<!--  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="4" nzXl="4" class="homeItem">-->
+<!--  </div>-->
+<!--  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="4" nzXl="4" class="homeItem">-->
+<!--  </div>-->
+<!--  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="4" nzXl="4" class="homeItem">-->
+<!--    <button nz-button nzType="primary" style="background-color: #00A79D" (click)="_createTask()">Create Task</button>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+
+
+
